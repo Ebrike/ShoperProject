@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Shoper.Entities.Category>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h5>Kategoriler</h5>
+
+<p>
+    <a class="btn btn-success" asp-action="Create"> Yeni Kategori</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryImagePath)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="@item.CategoryId">
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.CategoryImagePath))
+                    {
+                        <img src="~/images/@item.CategoryImagePath" style="margin:5px; width:100px;height:80px;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/No-Image.png" style="margin:5px; width:100px;height:80px;" />
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Düzenle", "Edit", new { id=item.CategoryId} ,new {@class ="btn btn-warning"})
+                    <a class="btn btn-danger text-white" href="javascript:void(0);" data-id="@item.CategoryId" id="sil">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("click", "#sil", function () {
+            $.ajax({
+                url: '@Url.Action("Delete")',
+                data: { id: $(this).attr("data-id") },
+                method: 'POST',
+                success: function (response) {
+                    //(this).parent('td').parent('tr').remove();
+                    window.location.reload();
+                }
+
+            });
+
+        });
+    });
+</script>

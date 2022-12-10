@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Shoper.Data.Repository
 {
-    internal class ProductPriceRepository : IProductPriceRepository
+    public class ProductPriceRepository : IProductPriceRepository
     {
         public ProductPrice Add(ProductPrice entity)
         {
@@ -35,7 +35,7 @@ namespace Shoper.Data.Repository
         {
             using (var context = new ShoperContext())
             {
-                var result = context.ProductPrices;
+                var result = context.ProductPrices.ToList();
                 return result;
             }
         }
@@ -53,7 +53,7 @@ namespace Shoper.Data.Repository
         {
             using (var context = new ShoperContext())
             {
-                var result = context.ProductPrices.Where(predicate);
+                var result = context.ProductPrices.Where(predicate).ToList();
                 return result;
             }
         }
