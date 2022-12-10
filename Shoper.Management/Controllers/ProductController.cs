@@ -12,12 +12,14 @@ namespace Shoper.Management.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IProductImageService _productImageService;
         private readonly IProductPriceService _productPriceService;
-        public ProductController(IProductService productService, ICategoryService categoryService, IProductImageService productImageService, IProductPriceService productPriceService)
+        private readonly IProductDiscountService _productDiscountService;
+        public ProductController(IProductService productService, ICategoryService categoryService, IProductImageService productImageService, IProductPriceService productPriceService, IProductDiscountService productDiscountService)
         {
             this._productService = productService;
             this._categoryService = categoryService;
             this._productImageService = productImageService;
             this._productPriceService = productPriceService;
+            this._productDiscountService = productDiscountService;
         }
         public IActionResult Index()
         {
@@ -184,6 +186,12 @@ namespace Shoper.Management.Controllers
                 return true;
             }
             return false;
+        }
+
+        public IActionResult Discounts(int id)
+        {
+            return View(_productDiscountService.GetExp(d=>d.ProductId==id));
+            // producta ait indirim listesi gidecek 
         }
        
     }

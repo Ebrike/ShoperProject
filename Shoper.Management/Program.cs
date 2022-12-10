@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using Shoper.BusinessLogic.Interface;
 using Shoper.BusinessLogic.Service;
 using Shoper.Data;
@@ -12,12 +13,14 @@ builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<IProductPriceRepository,ProductPriceRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
+builder.Services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
 // ICategoryRepository yerine burada category repository kullanýlacak burada
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductPriceService, ProductPriceService>();
 builder.Services.AddScoped<IProductImageService, ProductImageService>();
+builder.Services.AddScoped<IProductDiscountService, ProductDiscountService>();
 //controllerlarda da bu servisler kullanýlacaðý için burada onlaarýn yerine servisler tanýmlanýyor. 
 
 //builder.Services.AddDbContext<ShoperContext>();
