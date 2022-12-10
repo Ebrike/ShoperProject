@@ -54,19 +54,17 @@
 </table>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $(document).on("click", "#sil", function () {
-            $.ajax({
-                url: '@Url.Action("Delete")',
-                data: { id: $(this).attr("data-id") },
-                method: 'POST',
-                success: function (response) {
-                    //(this).parent('td').parent('tr').remove();
-                    window.location.reload();
-                }
+    $(document).on('click', '#sil', function () {
 
-            });
 
+        var catid = $(this).attr("data-id");
+        $.ajax({
+            url: '@Url.Action("Delete")',
+            data: { id: catid },
+            method: 'POST',
+            success: function (data) {
+                $("tr#" + catid).remove();
+            }
         });
     });
 </script>

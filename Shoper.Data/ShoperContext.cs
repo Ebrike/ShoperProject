@@ -13,6 +13,7 @@ namespace Shoper.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductPrice> ProductPrices { get; set; }
+        public DbSet<ProductDiscount> ProductDiscounts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,6 +29,7 @@ namespace Shoper.Data
             modelBuilder.Entity<Product>().ToTable("Product").HasKey(p=>p.ProductId);
             modelBuilder.Entity<ProductImage>().ToTable("ProductImage").HasKey(pi => pi.ImageId);
             modelBuilder.Entity<ProductPrice>().ToTable("ProductPrice").HasKey(pp=>pp.PriceId);
+            modelBuilder.Entity<ProductDiscount>().ToTable("ProductDiscount").HasKey(d => d.ProductDiscountId);
             // FLUENT API
             // migration oluştururken burası çalışacak 
 
@@ -56,6 +58,14 @@ namespace Shoper.Data
                .HasForeignKey(pp => pp.ProductId)
                .HasConstraintName("Fk_ProductImageToProduct");
 
+            //PRODUCT-PRODUCTDISCOUNT
+            modelBuilder.Entity<ProductDiscount>()
+              .HasOne<Product>(pp => pp.Product)
+              .WithMany(p => p.ProductDiscount)
+              .HasForeignKey(pp => pp.ProductId)
+              .HasConstraintName("Fk_ProductDiscountToProduct");
+
+            // FLUENT API domain classlar arasında ilişkilendirmek için mapping relation 
         }
     }
 }

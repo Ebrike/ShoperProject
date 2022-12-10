@@ -5,12 +5,10 @@
     ViewData["Title"] = "Edit";
 }
 
-
-
 <h4>Ürün Düzenleme Formu</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -26,60 +24,56 @@
                 <input asp-for="@Model.Product.ProductStock" class="form-control" />
                 <span asp-validation-for="@Model.Product.ProductStock" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div id="editor" class="form-group">
                 <label asp-for="@Model.Product.Description" class="control-label"></label>
-                <input asp-for="@Model.Product.Description" class="form-control" />
+                <textarea id="Description" asp-for="@Model.Product.Description" class="form-control"></textarea>               
                 <span asp-validation-for="@Model.Product.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Kategori</label>
-                <select asp-for="@Model.Product.CategoryId" class="form-control">
-                    <option selected>Seçiniz</option>
-                    @foreach (var category in (IEnumerable<Category>)ViewData["categories"])
-                    {
-                        <option selected=@(category.CategoryId==Model.Product.CategoryId?"true":"false") value="@category.CategoryId">@category.CategoryName</option>
-                        <!--buradan gelcek modelin category idsi ile producttaki kategori id eşitse true -->
-                    }
-                </select>
+                @Html.DropDownListFor(model =>model.Product.CategoryId,
+                    new SelectList(ViewBag.Categories,"Value","Text"),
+                    htmlAttributes: new{@class= "form-control"})
+                    <!--ilgili ürünün hangi kategoriye ait olduğunu -->
+                    
+                    
+                    
+               
                 <span asp-validation-for="@Model.Product.CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Para Birimi</label>
-                <select name="UnitPrice" asp-items="Html.GetEnumSelectList<UnitPrice>()"></select>
+                <select name="UnitPrice" asp-items="Html.GetEnumSelectList<UnitPrice>()" class="form-control"></select>
             </div>
             <div class="form-group">
                 <label class="control-label">Ürün Fiyat</label>
-                <input id="price" name="price" type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-                <table class="table table-striped">
-                    <tr>
-                        <td>Seç</td>
-                        <td>Fiyat</td>
-                    </tr>
-                    @foreach (var item in Model.Prices)
-                    {
-                        <tr>
-                            <td><input type="radio" name="@item.isValidFlag" id="@item.isValidFlag" /></td>
-                            <td>@item.Price</td>
-                        </tr>
-                    }
-                </table>
+                <input type="hidden" asp-for="@Model.Price.PriceId" class="form-control" />
+                <input asp-for="@Model.Price.Price" type="text" class="form-control" />
+                <!--bir tane fiyat gelecek -->
+                <!-- . price yazılacak olan fiyatın gelmesi için -->
             </div>
             <div class="form-group">
                 <label class="control-label">Ürüne Ait Resimler</label>
+                <div class="form-group">
                 @foreach (var img in Model.Images)
                 {
-                    if (img != null)
+                  <div id="@img.ImageId" style="display:inline-block;">
+
+                    @if (img != null)
                     {
-                        <img src="data:image/jpeg;base64 + Convert.ToBase64String(@img.Image)" style="margin:5px; height:100px; width:120px;" />
+                        <img src="data:image/jpeg;base64, @Convert.ToBase64String(@img.Image)" style="margin:5px; height:100px; width:120px;" />
                         <!--burada yaptığımız byte ı birleştirip açmamız gerekecek -->
                     }
                     else
                     {
                         <img src="~/images/No-Image.png" style="margin:5px; height:100px; width:120px;" />
                     }
+                            <div>
+                                <button id="sil" data-id="@img.ImageId" class="btn btn-danger">Sil</button>
+                            </div>
+                   </div>
                 }
+                </div>
 
             </div>
             <div class="form-group">
@@ -87,10 +81,33 @@
                 <input type="file" multiple id="img" name="img" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Kaydet" class="btn btn-primary" />
+                <input type="submit" value="Değiştir" class="btn btn-primary" />
                 <a class="btn btn-primary" asp-action="Index">Ana Sayfa</a>
             </div>
         </form>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).on('click','#sil',function() {
+
+        
+            var ImageId = $(this).attr("data-id");
+            $.ajax({
+                url: "@Url.Action("ImageDelete")",
+                data: { ImageId: ImageId },
+                method: 'POST',
+                success: function (data) {
+                    $("div#" + ImageId).remove();
+                }
+            });
+
+       
+    });
+</script>
+<!--CKEDİTOR-->
+<script src="~/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+    CKEDITOR.replace('Description');
+   
+</script>
 

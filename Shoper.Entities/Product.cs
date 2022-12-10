@@ -29,5 +29,6 @@ namespace Shoper.Entities
         public ICollection<ProductPrice> ProductPrice { get; set; }
         public ICollection<ProductImage>  ProductImage { get; set; }
 
+        public ICollection<ProductDiscount> ProductDiscount { get; set; } // bir ürüne tanımlı birden fazla indrim olabilir. 
     }
 }
