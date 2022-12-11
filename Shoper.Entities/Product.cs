@@ -21,7 +21,7 @@ namespace Shoper.Entities
         [Display(Name = "Ürün Açıklaması")]
         public string Description { get; set; }
 
-        [Display(Name = "Kategori Kodu")]
+        [Display(Name = "Kategori Adı")]
 
         public int CategoryId { get; set; }
         public Category ProductCategory { get; set; } // ürünün hangi kategoriye ait olduğu 

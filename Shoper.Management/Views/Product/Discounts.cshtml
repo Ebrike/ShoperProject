@@ -4,12 +4,12 @@
     ViewData["Title"] = "Discounts";
 }
 
-<h1>Discounts</h1>
+<h4>Ürün İndirimleri</h4>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateNewDiscount" asp-route-ProductId="@ViewBag.ProductId" class="btn btn-success">Yeni İndirim</a>
 </p>
-<table class="table">
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>
@@ -24,9 +24,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.DiscountRate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountCode)
-            </th>
+           
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
@@ -41,7 +39,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            <tr id="@item.ProductDiscountId" class="@(item.Status==true?"table-success":"table-warning")">
             <td>
                 @Html.DisplayFor(modelItem => item.ProductDiscountId)
             </td>
@@ -54,9 +52,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DiscountRate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiscountCode)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
@@ -67,11 +63,25 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Düzenle", "EditDiscount", new {  id=item.ProductDiscountId },new {@class="btn btn-warning"}) 
+                <a id="sil" data-id="@item.ProductDiscountId" href="javascript:void(0);" class="btn btn-danger">Sil</a>
+                
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<script type="text/javascript">
+    $(document).on('click', '#sil', function () {
+        var discountId = $(this).attr("data-id");
+        $.ajax({
+            url: '@Url.Action("DeleteDiscount")',
+            data: { id: discountId },
+            method: 'POST',
+            success: function (data) {
+                $("tr#" + discountId).remove();
+            }
+        });
+    });
+</script>

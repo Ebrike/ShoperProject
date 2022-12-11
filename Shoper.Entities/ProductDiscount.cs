@@ -19,19 +19,15 @@ namespace Shoper.Entities
         public int ProductId { get; set; }
 
         [Display(Name = "İndirim Oranı(%)")]
-        public int?
-            DiscountRate { get; set; }
-
-        [Display(Name = "İndirim Kupon Kodu")]
-        public string? DiscountCode { get; set; }
-
+        public int? DiscountRate { get; set; }
+        
         [Display(Name = " İndirim Durumu")]
-        public bool? Status { get; set; }
+        public bool Status { get; set; }
 
-        [Display(Name = "İndirim Başlangıç Tarihi")]
+        [Display(Name = "Başlangıç Tarihi")]
         public DateTime? StartDate { get; set; }
 
-        [Display(Name = "İndirim Bitiş Tarihi")]
+        [Display(Name = "Bitiş Tarihi")]
         public DateTime? EndDate { get; set; }
         public Product Product { get; set; }  // bir indirim bir ürüne uygulanacak 
     }

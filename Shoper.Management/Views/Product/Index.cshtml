@@ -32,7 +32,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            <tr id="@item.ProductId">
             <td>
                 @Html.DisplayFor(modelItem => item.ProductId)
             </td>
@@ -46,10 +46,11 @@
                     @Html.Raw(item.Description) <!--CKEDITOR --formatlanmış bir içeriği html raw string yapıya dönüştürür -->
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
+                @Html.DisplayFor(modelItem => item.ProductCategory.CategoryName)
             </td>
-            <td>
+            <td class="col-md-4">
                     @Html.ActionLink("Fiyat Geçmişi", "PriceHistory", new { id=item.ProductId} ,new {@class ="btn btn-info"})
+                    @Html.ActionLink("İndirimler", "Discounts", new { id=item.ProductId} ,new {@class ="btn btn-success"})
                     @Html.ActionLink("Düzenle", "Edit", new { id=item.ProductId} ,new {@class ="btn btn-warning"})
                     <a class="btn btn-danger text-white" href="javascript:void(0);" data-id="@item.ProductId" id="sil">Sil</a>
             </td>
@@ -57,3 +58,22 @@
 }
     </tbody>
 </table>
+<script type="text/javascript">
+    $(document).on('click', '#sil', function () {
+
+        var response = confirm('Bu ürün ve ona ait tüm bilgiler silinecektir.Emin misiniz?');
+        var ProductId = $(this).attr("data-id");
+        if(response==true)
+        {
+            $.ajax({
+                url: '@Url.Action("Delete")',
+                data: { id: ProductId },
+                method: 'POST',
+                success: function (data) {
+                    $("tr#" + ProductId).remove();
+                }
+            });
+        }
+       
+    });
+</script>

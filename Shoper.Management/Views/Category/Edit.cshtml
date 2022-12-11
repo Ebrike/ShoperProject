@@ -27,6 +27,10 @@
                 <input type="file" name="img" class="form-control" />
             </div>
             <div class="form-group">
+                <label class="control-label">Resim</label>
+                <img src="~/images/@(Model.CategoryImagePath!= null?Model.CategoryImagePath:"No-Image.png")" style="margin:5px; width:100px; height:100px;" />
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Değiştir" class="btn btn-primary" />
                 <a class="btn btn-primary" asp-action="Index">Ana Sayfa</a>
             </div>

@@ -38,6 +38,7 @@ namespace Shoper.Management.Controllers
         {
             if (model != null)
             {
+                
                 var InsertedModel = _productService.Add(model);
 
                 if (img.Count() > 0)
@@ -135,6 +136,21 @@ namespace Shoper.Management.Controllers
                 return View(model);
             }
         }
+        public bool Delete(int id)
+        {
+            var model = _productService.Get(id);
+            return _productService.Delete(model) != null;
+
+        }
+        public bool ImageDelete(int ImageId)
+        {
+            var result = _productImageService.Delete(_productImageService.Get(ImageId));
+            return result != null;
+            // servisler de get komutu id ye göre bulup getiriyorud 
+            // resut nullsa false değilse ture gönderir 
+            // yani silme işlemi yapılmadıysa false 
+        }
+        #region price 
         public IActionResult PriceHistory(int id)
         {
             return View(_productPriceService.GetExp(x => x.ProductId == id));// bir den fazla gidiyor bir liste onun için where yapısı olması lazım
@@ -159,14 +175,7 @@ namespace Shoper.Management.Controllers
             return View(model);
         }
         //[NonAction] // metot yazıcaz 
-        public bool ImageDelete(int ImageId)
-        {
-            var result=_productImageService.Delete(_productImageService.Get(ImageId));
-            return result!=null;
-            // servisler de get komutu id ye göre bulup getiriyorud 
-            // resut nullsa false değilse ture gönderir 
-            // yani silme işlemi yapılmadıysa false 
-        }
+       
 
         public bool SetValidFlag(int PriceId)
         {
@@ -187,12 +196,53 @@ namespace Shoper.Management.Controllers
             }
             return false;
         }
-
+        #endregion
+        #region discounts
         public IActionResult Discounts(int id)
         {
+            ViewBag.ProductId = id; // ilk başta içerisi boş olduğu için bir viewbag olarak gönderiyoruz. ürünün ilk indirimini yapacağımız için 
             return View(_productDiscountService.GetExp(d=>d.ProductId==id));
             // producta ait indirim listesi gidecek 
         }
-       
+        public bool DeleteDiscount(int id)
+        {
+            var result = _productDiscountService.Delete(_productDiscountService.Get(id));
+            return result != null;
+        }
+        public IActionResult CreateNewDiscount(int ProductId) 
+        {
+            ProductDiscount model = new ProductDiscount();
+            model.ProductId = ProductId; // belli olan bir ürüne ait bir indirim  onun için productıd belirtmemiz gerekir. 
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult CreateNewDiscount(ProductDiscount model)
+        {
+            if (model!=null)
+            {
+                _productDiscountService.Add(model);
+                return RedirectToAction("Discounts", new { id = model.ProductId });
+            }
+            return View(model);
+        }
+        public IActionResult EditDiscount(int id)
+        {
+            var model = _productDiscountService.Get(id);
+            return model != null ? View(model) : NotFound(); 
+        }
+        [HttpPost]
+        public IActionResult EditDiscount(ProductDiscount model)
+        {
+            if (model!=null)
+            {
+                _productDiscountService.Update(model);
+                return RedirectToAction("Discounts", new { id = model.ProductId });
+            }
+            return View(model);
+        }
+
+
+
+        #endregion
     }
 }
