@@ -16,6 +16,7 @@ namespace Shoper.Data
         public DbSet<ProductDiscount> ProductDiscounts { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<ProductComment> ProductComments { get; set; }
 
 
 
@@ -36,6 +37,7 @@ namespace Shoper.Data
             modelBuilder.Entity<ProductDiscount>().ToTable("ProductDiscount").HasKey(d => d.ProductDiscountId);
             modelBuilder.Entity<Address>().ToTable("Address").HasKey(a => a.AddressId);
             modelBuilder.Entity<Customer>().ToTable("Customer").HasKey(c => c.CustomerId);
+            modelBuilder.Entity<ProductComment>().ToTable("ProductComment").HasKey(c => c.CommentId);
 
 
 
@@ -80,6 +82,13 @@ namespace Shoper.Data
               .WithMany(p => p.Addresses)
               .HasForeignKey(pp => pp.CustomerId)
               .HasConstraintName("Fk_CustomerToAddress");
+
+            //PRODUCT-PRODUCTCOMMENT
+            modelBuilder.Entity<ProductComment>()
+              .HasOne<Product>(pp => pp.Product)
+              .WithMany(p => p.ProductComment)
+              .HasForeignKey(pp => pp.ProductId)
+              .HasConstraintName("Fk_ProductCommentToProduct");
 
             // FLUENT API domain classlar arasında ilişkilendirmek için mapping relation 
         }

@@ -16,6 +16,7 @@ builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IProductCommentRepository, ProductCommentRepository>();
 // ICategoryRepository yerine burada category repository kullanýlacak burada
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IProductImageService, ProductImageService>();
 builder.Services.AddScoped<IProductDiscountService, ProductDiscountService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IProductCommentService, ProductCommentService>();
 //controllerlarda da bu servisler kullanýlacaðý için burada onlaarýn yerine servisler tanýmlanýyor. 
 
 //builder.Services.AddDbContext<ShoperContext>();

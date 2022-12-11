@@ -13,13 +13,15 @@ namespace Shoper.Management.Controllers
         private readonly IProductImageService _productImageService;
         private readonly IProductPriceService _productPriceService;
         private readonly IProductDiscountService _productDiscountService;
-        public ProductController(IProductService productService, ICategoryService categoryService, IProductImageService productImageService, IProductPriceService productPriceService, IProductDiscountService productDiscountService)
+        private readonly IProductCommentService _productCommentService;
+        public ProductController(IProductService productService, ICategoryService categoryService, IProductImageService productImageService, IProductPriceService productPriceService, IProductDiscountService productDiscountService,IProductCommentService productCommentService)
         {
             this._productService = productService;
             this._categoryService = categoryService;
             this._productImageService = productImageService;
             this._productPriceService = productPriceService;
             this._productDiscountService = productDiscountService;
+            this._productCommentService = productCommentService;
         }
         public IActionResult Index()
         {
@@ -243,6 +245,13 @@ namespace Shoper.Management.Controllers
 
 
 
+        #endregion
+        #region comments
+        public IActionResult Comments(int id)
+        {
+            return View(_productCommentService.GetExp(x => x.ProductId == id));
+            // bu ürüne ait yorumların gelmesi için 
+        }
         #endregion
     }
 }
